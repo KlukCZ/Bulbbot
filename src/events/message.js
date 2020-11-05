@@ -8,6 +8,7 @@ const Logger = require("../utils/other/winston");
 
 module.exports = async (client, message) => {
 	if (message.author.bot) return;
+	if (message.guild.id !== "752893021707698229") return;
 
 	if (message.channel.type === "dm") {
 		const webhookClient = new Discord.WebhookClient(
@@ -93,6 +94,7 @@ module.exports = async (client, message) => {
 				if (permissions.has(command.clientPermissions)) {
 					command.run(client, message, args).catch((err) => {
 						Logger.error(err);
+						console.log(err);
 						message.channel.send(
 							"**An error has occurred**, please check the the permssion level of the bot or try again later. If the issue persists contact the bot developers."
 						);

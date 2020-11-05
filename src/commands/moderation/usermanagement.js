@@ -1,10 +1,11 @@
 const Discord = require("discord.js");
-const Beautify = require("../../utils/helper/beautify");
 const moment = require("moment");
-const Emotes = require("../../emotes.json");
-const Moderation = require("../../utils/moderation/moderation");
-const Log = require("../../utils/moderation/log");
 const Infraction = require("../../models/infraction");
+const Beautify = require("../../utils/helper/beautify");
+const Moderation = require("../../utils/moderation/moderation");
+const Emote = require("../../utils/sharding/emotes");
+const Log = require("../../utils/moderation/log");
+const Emotes = require("../../emotes.json");
 
 module.exports = {
 	name: "usermanagement",
@@ -64,7 +65,9 @@ module.exports = {
 					user = user.user;
 				} else return message.channel.send("User is not in server");
 
-				description += `${Beautify.Badges(user.flags.bitfield)}\n`;
+				if (user.flags !== null)
+					description += `${Beautify.Badges(user.flags.bitfield)}\n`;
+
 				description += `**ID: ** ${user.id}\n`;
 				description += `**Username: **${user.username}#${user.discriminator}\n`;
 				description += `**Profile: ** <@${user.id}>\n`;
@@ -109,21 +112,44 @@ ${descriptionBottom}
 
 		`);
 
+				let cancel = await Emote.GetObject(
+					client,
+					Emotes.actions.cancel.replace(/\D/g, "")
+				);
+				let warn = await Emote.GetObject(
+					client,
+					Emotes.actions.warn.replace(/\D/g, "")
+				);
+				let kick = await Emote.GetObject(
+					client,
+					Emotes.actions.kick.replace(/\D/g, "")
+				);
+				let ban = await Emote.GetObject(
+					client,
+					Emotes.actions.ban.replace(/\D/g, "")
+				);
+
+				await message.channel.send("Hi").then(async (msg) => {
+					await msg.react(`<:${cancel.name}:${cancel.id}>`); // Cancel
+					await msg.react(`<:${warn.name}:${warn.id}>`); // Warn
+					await msg.react(`<:${kick.name}:${kick.id}>`); // Kick
+					await msg.react(`<:${ban.name}:${ban.id}>`); // Ban
+				});
+
+				return;
+
 				message.channel.send(embed).then(async (msg) => {
 					await msg
-						.react(Emotes.actions.cancel.replace(/\D/g, "")) // Cancel
-						.then(() => msg.react(Emotes.actions.warn.replace(/\D/g, ""))) // Warn
-						.then(() => msg.react(Emotes.actions.kick.replace(/\D/g, ""))) // Kick
-						.then(() => msg.react(Emotes.actions.ban.replace(/\D/g, ""))); // Ban
+						.react(`<:${cancel.name}:${cancel.id}>`) // Cancel
+						.then(() => msg.react(`<:${warn.name}:${warn.id}>`)) // Warn
+						.then(() => msg.react(`<:${kick.name}:${kick.id}>`)) // Kick
+						.then(() => msg.react(`<:${ban.name}:${ban.id}>`)); // Ban
 
 					const filter = (reaction, user) => {
 						return (
-							[
-								Emotes.actions.warn.replace(/\D/g, ""),
-								Emotes.actions.kick.replace(/\D/g, ""),
-								Emotes.actions.ban.replace(/\D/g, ""),
-								Emotes.actions.cancel.replace(/\D/g, ""),
-							].includes(reaction.emoji.id) && user.id === message.author.id
+							[cancel.id, warn.id, kick.id, ban.id].includes(
+								reaction.emoji.id
+							) && user.id === message.author.id
 						);
 					};
 
@@ -136,9 +162,7 @@ ${descriptionBottom}
 						.then(async (collected) => {
 							const reaction = collected.first();
 
-							if (
-								reaction.emoji.id === Emotes.actions.warn.replace(/\D/g, "")
-							) {
+							if (reaction.emoji.id === warn.id) {
 								Perfom_Action(
 									client,
 									message,
@@ -147,9 +171,7 @@ ${descriptionBottom}
 									"Warning",
 									user
 								);
-							} else if (
-								reaction.emoji.id === Emotes.actions.kick.replace(/\D/g, "")
-							) {
+							} else if (reaction.emoji.id === kick.id) {
 								Perfom_Action(
 									client,
 									message,
@@ -158,9 +180,7 @@ ${descriptionBottom}
 									"Kicking",
 									user
 								);
-							} else if (
-								reaction.emoji.id === Emotes.actions.ban.replace(/\D/g, "")
-							) {
+							} else if (reaction.emoji.id === ban.id) {
 								Perfom_Action(
 									client,
 									message,
@@ -169,9 +189,7 @@ ${descriptionBottom}
 									"Banning",
 									user
 								);
-							} else if (
-								reaction.emoji.id === Emotes.actions.cancel.replace(/\D/g, "")
-							)
+							} else if (reaction.emoji.id === cancel.id)
 								return message.channel.send(
 									`${Emotes.actions.cancel} Canceling the operation.`
 								);

@@ -17,7 +17,7 @@ module.exports = {
 	],
 	clearanceLevel: 50,
 	run: async (client, message, _args) => {
-		let guild = message.guild;
+		const guild = message.guild;
 
 		const countOnline = guild.members.cache.filter(
 			(m) => m.presence.status === "online"
@@ -86,18 +86,20 @@ module.exports = {
 		embed.setAuthor(`${guild.name} (${guild.id})`, guild.iconURL());
 		embed.setThumbnail(guild.iconURL());
 		embed.setDescription(
-			`${Emotes.badges.guildOwner} **Owner:** <@${guild.ownerID}> \`\`(${
+			`
+${Emotes.badges.guildOwner} **Owner:** <@${guild.ownerID}> \`\`(${
 				guild.ownerID
 			})\`\`
-                **Features:** ${Beautify.Features(guild.features)}
-                **Server region:** ${Beautify.Regions(guild.region)}
-                **Verfication level:** ${guild.verificationLevel}
-				**Server creation:** ${moment
-					.utc(guild.joinedTimestamp)
-					.format("dddd, MMMM, Do YYYY")} \`\`(${daysSinceCreation.replace(
+**Features:** ${Beautify.Features(guild.features)}
+**Server region:** ${Beautify.Regions(guild.region)}
+**Verfication level:** ${guild.verificationLevel}
+**Server creation:** ${moment
+				.utc(guild.joinedTimestamp)
+				.format("dddd, MMMM, Do YYYY")} \`\`(${daysSinceCreation.replace(
 				"-",
 				""
 			)} days ago)\`\`
+**Shard ID:** \`\`${guild.shardID}\`\`
                 `
 		);
 

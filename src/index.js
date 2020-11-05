@@ -1,9 +1,7 @@
 const { Client, Collection } = require("discord.js");
 const { config } = require("dotenv");
 const fs = require("fs");
-const ascii = require("ascii-table");
 const { resolve } = require("path");
-const table = new ascii().setHeading("Event", "Status");
 const cron = require("node-cron");
 const CommandJobs = require("./utils/cronjob/command");
 const Logger = require("./utils/other/winston");
@@ -29,11 +27,8 @@ fs.readdir(resolve(__dirname, "./events/"), (err, files) => {
 		if (!file.endsWith(".js")) return;
 		const evt = require(`./events/${file}`);
 		let evtName = file.split(".")[0];
-
-		table.addRow(evtName, "✅");
 		client.on(evtName, evt.bind(null, client));
 	});
-	console.log(table.toString());
 });
 
 // Run this every 30 seconds
