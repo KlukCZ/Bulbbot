@@ -129,15 +129,6 @@ ${descriptionBottom}
 					Emotes.actions.ban.replace(/\D/g, "")
 				);
 
-				await message.channel.send("Hi").then(async (msg) => {
-					await msg.react(`<:${cancel.name}:${cancel.id}>`); // Cancel
-					await msg.react(`<:${warn.name}:${warn.id}>`); // Warn
-					await msg.react(`<:${kick.name}:${kick.id}>`); // Kick
-					await msg.react(`<:${ban.name}:${ban.id}>`); // Ban
-				});
-
-				return;
-
 				message.channel.send(embed).then(async (msg) => {
 					await msg
 						.react(`<:${cancel.name}:${cancel.id}>`) // Cancel
