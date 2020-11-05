@@ -11,7 +11,7 @@ module.exports = {
 	run: async (client, message, _args) => {
 		const embed = new Discord.MessageEmbed()
 			.setColor(process.env.COLOR)
-			.setTitle("🏓 Pong!")
+			.setTitle(`🏓 Pong in shard ${message.guild.shardID}`)
 			.setDescription(
 				`Bot Latency is **${Math.floor(
 					new Date().getTime() - message.createdTimestamp
