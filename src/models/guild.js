@@ -7,8 +7,7 @@ const guildSchema = mongoose.Schema({
 	trackAnalytics: Boolean,
 	settings: {
 		language: String,
-		dm_on_action: Boolean,
-		allow_non_latin_usernames: Boolean,
+		ignoreMissingPerms: Boolean,
 	},
 	logChannels: {
 		modAction: String,
@@ -34,6 +33,51 @@ const guildSchema = mongoose.Schema({
 			clearanceLevel: Number,
 		},
 	],
+	automoderation: {
+		enabled: Boolean,
+		massMention: {
+			enabled: Boolean,
+			amount: Number,
+			action: String,
+			duration: String,
+		},
+		mentionSpam: {
+			enabled: Boolean,
+			amount: Number,
+			action: String,
+			duration: String,
+		},
+		tooManyLines: {
+			enabled: Boolean,
+			amount: Number,
+			action: String,
+			duration: String,
+		},
+		tooManyCharacters: {
+			enabled: Boolean,
+			amount: Number,
+			action: String,
+			duration: String,
+		},
+		removeZalgo: {
+			enabled: Boolean,
+		},
+		removeZalgoFromUsername: {
+			enabled: Boolean,
+		},
+		removeLinks: {
+			enabled: Boolean,
+			whiteList: Array,
+			action: String,
+			duration: String,
+		},
+		removeInviteLinks: {
+			enabled: Boolean,
+			whiteList: Array,
+			action: String,
+			duration: String,
+		},
+	},
 	joinDate: Date,
 });
 
