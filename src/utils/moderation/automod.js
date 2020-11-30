@@ -14,6 +14,7 @@ module.exports = {
 		const AutoMod = guildObject.automoderation;
 
 		if (!AutoMod.enabled) return;
+		if (message.member.hasPermission("ADMINISTRATOR")) return;
 
 		if (
 			InviteLinks(string, AutoMod.removeInviteLinks) &&
@@ -58,6 +59,23 @@ module.exports = {
 				""
 			);
 		}
+
+		if (MentionSpam(message, AutoMod.mentionSpam)) {
+			message.delete
+			await Log.Mod_action(
+				client,
+				guild,
+				Translator.Translate("automod_violation_log", {
+					user: message.author.username,
+					user_id: message.author.id,
+					user_discriminator: message.author.discriminator,
+					filter: "MAX_MENTIONS",
+					content: message.content,
+					channel_id: message.channel.id,
+				}),
+				""
+			);
+		}
 	},
 };
 
@@ -87,4 +105,8 @@ function BlackListedWords(string, object) {
 			return true;
 		}
 	}
+}
+
+function MentionSpam(message, object) {
+	if (message.mentions.users.size >= object.amount) return true;
 }
