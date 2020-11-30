@@ -15,6 +15,7 @@ const guildSchema = mongoose.Schema({
 		role: String,
 		member: String,
 		channel: String,
+		automoderation: String,
 		join_leave: String,
 	},
 	roles: {
@@ -59,12 +60,6 @@ const guildSchema = mongoose.Schema({
 			action: String,
 			duration: String,
 		},
-		removeZalgo: {
-			enabled: Boolean,
-		},
-		removeZalgoFromUsername: {
-			enabled: Boolean,
-		},
 		removeLinks: {
 			enabled: Boolean,
 			whiteList: Array,
@@ -74,6 +69,12 @@ const guildSchema = mongoose.Schema({
 		removeInviteLinks: {
 			enabled: Boolean,
 			whiteList: Array,
+			action: String,
+			duration: String,
+		},
+		blacklistedWords: {
+			enabled: Boolean,
+			blacklist: Array,
 			action: String,
 			duration: String,
 		},

@@ -24,10 +24,56 @@ module.exports = {
 					role: "",
 					member: "",
 					channel: "",
+					automoderation: "",
 					join_leave: "",
 				},
 				roles: {
 					mute: "",
+				},
+				automoderation: {
+					enabled: false,
+					massMention: {
+						enabled: false,
+						amount: 0,
+						action: "kick",
+						duration: null,
+					},
+					mentionSpam: {
+						enabled: false,
+						amount: 0,
+						action: "kick",
+						duration: null,
+					},
+					tooManyLines: {
+						enabled: false,
+						amount: 0,
+						action: "mute",
+						duration: "1h",
+					},
+					tooManyCharacters: {
+						enabled: false,
+						amount: 0,
+						action: "mute",
+						duration: "1h",
+					},
+					removeLinks: {
+						enabled: false,
+						whiteList: [],
+						action: "mute",
+						duration: "10m",
+					},
+					removeInviteLinks: {
+						enabled: false,
+						whiteList: [],
+						action: "kick",
+						duration: null,
+					},
+					blacklistedWords: {
+						enabled: false,
+						blacklist: [],
+						action: "warn",
+						duration: null,
+					},
 				},
 				joinDate: new Date(),
 			});

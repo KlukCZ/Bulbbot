@@ -1,7 +1,7 @@
 const Log = require("../utils/moderation/log");
 const Validate = require("../utils/helper/validate");
-const Translator = require("../utils/lang/translator")
-const Automod = require("../utils/helper/automod")
+const Translator = require("../utils/lang/translator");
+const Automod = require("../utils/moderation/automod");
 
 module.exports = async (client, oldMessage, newMessage) => {
 	if (oldMessage.author.bot) return;
@@ -18,7 +18,12 @@ module.exports = async (client, oldMessage, newMessage) => {
 			newMessage.guild
 		));
 
-	await Automod.Master(client, newMessage.content, newMessage.guild.id, newMessage)
+	await Automod.Master(
+		client,
+		newMessage.content,
+		newMessage.guild.id,
+		newMessage
+	);
 
 	await Log.Message_Log(
 		client,
@@ -29,7 +34,7 @@ module.exports = async (client, oldMessage, newMessage) => {
 			user_id: newMessage.author.id,
 			new_value: newMessage.content,
 			old_value: oldMessage.content,
-			channel_id: newMessage.channel.id
+			channel_id: newMessage.channel.id,
 		})
 	);
 };
