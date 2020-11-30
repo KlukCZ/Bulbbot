@@ -1,13 +1,14 @@
 const Guild = require("../../models/guild");
 
 const Log = require("./log");
+const Regex = require("../other/regex");
 const Translator = require("../lang/translator");
 
 module.exports = {
 	Master: async (client, string, guild, message) => {
 		const guildObject = await Guild.findOne(
 			{ guildID: message.guild.id },
-			async (err, _g) => {
+			async (_err, _g) => {
 				//if (err) Logger.error(err);
 			}
 		);
@@ -61,7 +62,7 @@ module.exports = {
 		}
 
 		if (MentionSpam(message, AutoMod.mentionSpam)) {
-			message.delete
+			message.delete;
 			await Log.Mod_action(
 				client,
 				guild,
@@ -92,9 +93,7 @@ function InviteLinks(string, object) {
 			return false;
 		}
 	}
-	return string.match(
-		/(http:\/\/|https:\/\/)?(www\.)?(discord\.gg|discord\.me|discordapp\.com\/invite|discord\.com\/invite)\/([A-Za-z0-9])+/g
-	);
+	return string.match(Regex.INVITE_LINK);
 }
 
 function BlackListedWords(string, object) {
