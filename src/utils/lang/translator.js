@@ -15,13 +15,16 @@ module.exports = {
 			moderator,
 			moderator_discriminator,
 			moderator_id,
+			old_value,
 			new_value,
 			cl_commandName,
 			cL_CL,
 			age,
 			reason,
+			time,
 			nick_old,
-			nick_new
+			nick_new,
+			channel_id
 		} = {}
 	) => {
 		let response = JSON.parse(JSON.stringify(lang))[key].toString();
@@ -39,10 +42,14 @@ module.exports = {
 		response = response.replace(/({moderator_discriminator})/, moderator_discriminator);
 		response = response.replace(/({moderator_id})/, moderator_id);
 		response = response.replace(/({reason})/, reason);
+		response = response.replace(/({time})/, time);
 
 		//Events
 		response = response.replace(/({nick_new})/, nick_new);
 		response = response.replace(/({nick_old})/, nick_old);
+		response = response.replace(/({channel_id})/, channel_id);
+		response = response.replace(/({channel_id})/, channel_id);
+		response = response.replace(/({old_value})/g, old_value);
 
 		// Clearance
 		response = response.replace(/({cl_commandName})/g, cl_commandName);
@@ -63,6 +70,10 @@ module.exports = {
 		response = response.replace(/({emote_ban})/g, Emotes.actions.ban);
 		response = response.replace(/({emote_unban})/g, Emotes.actions.unban);
 		response = response.replace(/({emote_kick})/g, Emotes.actions.kick);
+		response = response.replace(/({emote_trash})/g, Emotes.other.trash);
+		response = response.replace(/({emote_wrench})/g, Emotes.other.wrench);
+		response = response.replace(/({emote_mute})/g, Emotes.actions.mute);
+		response = response.replace(/({emote_unban})/g, Emotes.actions.unban);
 
 		//Configure
 		response = response.replace(/({new_value})/g, new_value);
