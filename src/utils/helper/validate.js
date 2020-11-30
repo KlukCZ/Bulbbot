@@ -1,3 +1,5 @@
+const Regex = require("../other/regex");
+
 module.exports = {
 	Master: async (client, string, guild) => {
 		string = await Remove_Mentions(client, string);
@@ -9,36 +11,42 @@ module.exports = {
 };
 
 async function Remove_Mentions(client, string) {
-	let mentions = string.match(/<@?!?[0-9>]+/g);
+	let mentions = string.match(Regex.USER_MENTION);
 
 	if (mentions === null) return string;
 
 	for (var i = 0; i < mentions.length; i++) {
-		let user = await client.users.fetch(mentions[i].replace(/\D/g, ``));
-
-		string = string.replace(
-			mentions[i],
-			`@${user.username}#${user.discriminator}`
-		);
+		try {
+			let user = await client.users.fetch(mentions[i].replace(/\D/g, ``));
+			string = string.replace(
+				mentions[i],
+				`@${user.username}#${user.discriminator}`
+			);
+		} catch (error) {
+			continue;
+		}
 	}
 	return string;
 }
 
 async function Remove_Role_Mentions(guild, string) {
-	let mentions = string.match(/<@&[0-9>]+/g);
+	let mentions = string.match(Regex.ROLE_MENTION);
 
 	if (mentions === null) return string;
 
 	for (var i = 0; i < mentions.length; i++) {
-		let role = guild.roles.cache.get(mentions[i].replace(/\D/g, ``));
-
-		string = string.replace(mentions[i], `@${role.name}`);
+		try {
+			let role = guild.roles.cache.get(mentions[i].replace(/\D/g, ``));
+			string = string.replace(mentions[i], `@${role.name}`);
+		} catch (error) {
+			continue;
+		}
 	}
 	return string;
 }
 
 async function Remove_AtEveryone(string) {
-	let mentions = string.match(/@everyone|@here+/g);
+	let mentions = string.match(Regex.ATEVERYONE_ATHERE);
 
 	if (mentions === null) return string;
 

@@ -1,5 +1,6 @@
 const Moderation = require("../../utils/moderation/moderation");
 const Log = require("../../utils/moderation/log");
+const Regex = require("../../utils/other/regex");
 const Emotes = require("../../emotes.json");
 
 module.exports = {
@@ -17,14 +18,9 @@ module.exports = {
 				`${Emotes.actions.warn} Missing required argument \`\`users\`\`\n${Emotes.other.tools} Correct usage of command: \`\`multiban <user> [user2]...[reason]\`\``
 			);
 
-		const targets = args
-			.slice(0)
-			.join(" ")
-			.match(/<@?!?[0-9>]+|[0-9>]{17,}/g);
-		let reason = args
-			.slice(0)
-			.join("")
-			.replace(/<@?!?[0-9>]+|[0-9>]{17,}/g, "");
+		const targets = args.slice(0).join(" ").match(Regex.USER_MENTION_USER_ID);
+		let reason = args.slice(0).join("").replace(Regex.USER_MENTION_USER_ID, "");
+
 		if (reason === "") reason = "No reason given";
 		let fullList = "";
 
