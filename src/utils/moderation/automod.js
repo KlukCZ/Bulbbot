@@ -1,9 +1,24 @@
+const Guild = require("../../models/guild");
+
 const Log = require("./log");
 const Translator = require("../lang/translator");
 
 module.exports = {
 	Master: async (client, string, guild, message) => {
-		if (checkForInvites(string)) {
+		const guildObject = await Guild.findOne(
+			{ guildID: message.guild.id },
+			async (err, _g) => {
+				//if (err) Logger.error(err);
+			}
+		);
+		const AutoMod = guildObject.automoderation;
+
+		if (!AutoMod.enabled) return;
+
+		if (
+			InviteLinks(string, AutoMod.removeInviteLinks) &&
+			AutoMod.removeInviteLinks.enabled
+		) {
 			message.delete();
 			/*
 			 * Please log this as a separate action, not Mod_Action. That way the user has control over what channel it gets logged to.
@@ -24,7 +39,10 @@ module.exports = {
 			);
 		}
 
-		if (checkForCursing(string)) {
+		if (
+			BlackListedWords(string, AutoMod.blacklistedWords) &&
+			AutoMod.blacklistedWords.enabled
+		) {
 			message.delete();
 			await Log.Mod_action(
 				client,
@@ -43,8 +61,8 @@ module.exports = {
 	},
 };
 
-function checkForInvites(string) {
-	let allowed_invites = ["allowed_invite", "kluk", "philip"];
+function InviteLinks(string, object) {
+	let allowed_invites = object.whiteList;
 	for (let i = 0; i < allowed_invites.length; i++) {
 		let regex = new RegExp(
 			"(http://|https://)?(www.)?(discord.gg|discord.me|discordapp.com/invite|discord.com/invite)/(" +
@@ -61,15 +79,10 @@ function checkForInvites(string) {
 	);
 }
 
-function checkForCursing(string) {
-	let curse_words = [
-		"nasty_word1",
-		"nasty_word2",
-		"nasty_word3",
-		"nasty_word4",
-	];
-	for (let i = 0; i < curse_words.length; i++) {
-		let regex = new RegExp("(" + curse_words[i] + ")+", "gi");
+function BlackListedWords(string, object) {
+	let blacklist = object.blacklist;
+	for (let i = 0; i < blacklist.length; i++) {
+		let regex = new RegExp("(" + blacklist[i] + ")+", "gi");
 		if (string.match(regex)) {
 			return true;
 		}
