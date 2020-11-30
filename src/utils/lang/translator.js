@@ -24,7 +24,9 @@ module.exports = {
 			time,
 			nick_old,
 			nick_new,
-			channel_id
+			channel_id,
+			filter,
+			content
 		} = {}
 	) => {
 		let response = JSON.parse(JSON.stringify(lang))[key].toString();
@@ -57,6 +59,8 @@ module.exports = {
 
 		//Events
 		response = response.replace(/({age})/g, age);
+		response = response.replace(/({content})/, content);
+		response = response.replace(/({filter})/, filter);
 
 		//Emotes
 		response = response.replace(/({emote_loading})/g, Emotes.other.loading);

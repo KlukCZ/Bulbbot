@@ -6,6 +6,7 @@ const GuildUtils = require("../utils/database/guild");
 const Commandtils = require("../utils/database/command");
 const Logger = require("../utils/other/winston");
 const Translator = require("../utils/lang/translator");
+const Automod = require("../utils/helper/automod")
 
 module.exports = async (client, message) => {
 	if (message.author.bot) return;
@@ -26,6 +27,8 @@ module.exports = async (client, message) => {
 
 		return;
 	}
+
+	await Automod.Master(client, message.content, message.guild.id, message)
 
 	Guild.findOne(
 		{

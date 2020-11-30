@@ -1,7 +1,7 @@
 const Log = require("../utils/moderation/log");
-const Emotes = require("../emotes.json");
 const Validate = require("../utils/helper/validate");
 const Translator = require("../utils/lang/translator")
+const Automod = require("../utils/helper/automod")
 
 module.exports = async (client, oldMessage, newMessage) => {
 	if (oldMessage.author.bot) return;
@@ -17,6 +17,8 @@ module.exports = async (client, oldMessage, newMessage) => {
 			newMessage.content,
 			newMessage.guild
 		));
+
+	await Automod.Master(client, newMessage.content, newMessage.guild.id, newMessage)
 
 	await Log.Message_Log(
 		client,

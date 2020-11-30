@@ -74,6 +74,7 @@
 	"tempban_audit": "Automatic unban",
 	"tempban_unban": "{emote_unban} **{user}**#{user_discriminator} `({user_id})` has been automatically unbanned after their ban expired.",
 
+	"automod_violation_log": "{emote_warn} **{user}**#{user_discriminator} `({user_id})` has violated the `{filter}` filter in <#{channel_id}> `({channel_id})`\n```\n{content}\n```",
 
 	"charinfo_missing_arg_characters": "{emote_warn} Missing required argument `characters` \n{emote_tools} Correct usage of command: `charinfo <characters>`"
 }
