@@ -39,7 +39,7 @@ module.exports = {
 						msg += `**Date:** ${inciUpdates.created_at}\n`;
 					}
 
-					embed = new Discord.MessageEmbed()
+					const embed = new Discord.MessageEmbed()
 						.setColor(process.env.COLOR)
 						.setTitle("Discord Status Updates")
 						.setTimestamp()
