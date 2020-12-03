@@ -90,6 +90,26 @@ module.exports = {
 					user: message.author.username,
 					user_id: message.author.id,
 					user_discriminator: message.author.discriminator,
+					filter: "MENTION_SPAM",
+					content: message.content,
+					channel_id: message.channel.id,
+				}),
+				""
+			);
+		}
+
+		if (
+			MentionSpam(client, AutoMod.mentionSpam) &&
+			AutoMod.mentionSpam.enabled
+		) {
+			message.delete();
+			await Log.Mod_action(
+				client,
+				guild,
+				Translator.Translate("automod_violation_log", {
+					user: message.author.username,
+					user_id: message.author.id,
+					user_discriminator: message.author.discriminator,
 					filter: "MAX_MENTIONS",
 					content: message.content,
 					channel_id: message.channel.id,
@@ -128,5 +148,10 @@ function BlackListedWords(string, object) {
 
 function MassMention(string, object) {
 	const mentions = string.match(Regex.USER_MENTION);
+	if (mentions === null) return false;
 	if (mentions.length >= object.amount) return true;
+}
+
+function MentionSpam(client, object) {
+	return false;
 }
