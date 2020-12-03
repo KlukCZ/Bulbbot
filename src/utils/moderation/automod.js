@@ -12,10 +12,27 @@ module.exports = {
 				//if (err) Logger.error(err);
 			}
 		);
+
+		let authorClearance = 0;
+		if (
+			message.author.id === message.guild.ownerID ||
+			message.member.hasPermission("ADMINISTRATOR")
+		)
+			authorClearance = 100;
+		else {
+			guildObject.moderationRoles.forEach((o) => {
+				if (
+					message.member.roles.cache.has(o.roleId) &&
+					authorClearance < o.clearanceLevel
+				)
+					authorClearance = o.clearanceLevel;
+			});
+		}
+
 		const AutoMod = guildObject.automoderation;
 
 		if (!AutoMod.enabled) return;
-		if (message.member.hasPermission("ADMINISTRATOR")) return;
+		if (authorClearance >= 50) return;
 
 		if (
 			InviteLinks(string, AutoMod.removeInviteLinks) &&
@@ -61,8 +78,11 @@ module.exports = {
 			);
 		}
 
-		if (MentionSpam(message, AutoMod.mentionSpam)) {
-			message.delete;
+		if (
+			MassMention(string, AutoMod.massMention) &&
+			AutoMod.massMention.enabled
+		) {
+			message.delete();
 			await Log.Mod_action(
 				client,
 				guild,
@@ -106,6 +126,7 @@ function BlackListedWords(string, object) {
 	}
 }
 
-function MentionSpam(message, object) {
-	if (message.mentions.users.size >= object.amount) return true;
+function MassMention(string, object) {
+	const mentions = string.match(Regex.USER_MENTION);
+	if (mentions.length >= object.amount) return true;
 }
